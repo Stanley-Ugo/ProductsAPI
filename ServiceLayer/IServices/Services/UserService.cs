@@ -39,5 +39,31 @@ namespace ProductsAPI.ServiceLayer.IServices.Services
 
             return userViewModel;
         }
+
+        public bool CreateUserService(UserViewModel userVM)
+        {
+            bool result = false;
+
+            if (!string.IsNullOrEmpty(userVM.Name) && !string.IsNullOrEmpty(userVM.Email) && !string.IsNullOrEmpty(userVM.Password) && !string.IsNullOrEmpty(userVM.Role))
+            {
+                User user = new User
+                {
+                    Name = userVM.Name,
+                    Email = userVM.Email,
+                    Password = userVM.Password,
+                    Role = userVM.Role
+                };
+
+                _unitOfWork.User.Add(user);
+                var response = _unitOfWork.Save();
+
+                if (response > 0)
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
     }
 }

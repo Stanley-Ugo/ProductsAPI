@@ -7,5 +7,7 @@ namespace ProductsAPI.ServiceLayer.IServices
     {
         IEnumerable<UserViewModel> GetAllUsersService();
 
+        bool CreateUserService(UserViewModel user);
+
     }
 }

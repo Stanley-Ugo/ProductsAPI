@@ -25,5 +25,33 @@ namespace ProductsAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("CreateUser")]
+        public IActionResult CreateUser([FromBody] UserViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(user.Name) && !string.IsNullOrEmpty(user.Email) && !string.IsNullOrEmpty(user.Password) && !string.IsNullOrEmpty(user.Role))
+                    {
+                        var resonse = _userService.CreateUserService(user);
+
+                        if (resonse == true)
+                        {
+                            return Ok(new { responseCode = 201, responseDescription = "User Created Successfully!", Data = user });
+                        }
+
+                        return BadRequest();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { Message = ex.Message });
+                }
+            }
+
+            return BadRequest(new { Message = "Incorrect User Details!!" });
+        }
     }
 }
