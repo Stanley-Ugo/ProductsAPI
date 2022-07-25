@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.ServiceLayer.IServices;
 using ProductsAPI.ViewModels;
 using System;
@@ -19,6 +20,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllProducts()
         {
             var result = _productService.GetAllProductService();
@@ -27,6 +29,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpGet("GetProductById/{id:int}")]
+        [Authorize]
         public IActionResult GetProductById(int id)
         {
             try
@@ -48,6 +51,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpPost("CreateProduct")]
+        [Authorize]
         public IActionResult CreateProduct([FromBody]ProductViewModel product)
         {
             if (ModelState.IsValid)
@@ -76,6 +80,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpPut("UpdateProduct")]
+        [Authorize]
         public IActionResult UpdateProduct([FromBody] ProductViewModel product)
         {
             if (ModelState.IsValid)
@@ -105,6 +110,7 @@ namespace ProductsAPI.Controllers
 
         [Route("DisableProduct/{id:int}")]
         [HttpGet]
+        [Authorize]
         public IActionResult DisableProduct(int id)
         {
             var product = _productService.DisableProductByIdService(id);
@@ -117,6 +123,7 @@ namespace ProductsAPI.Controllers
 
         [Route("DeleteProduct/{id:int}")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteProduct(int id)
         {
             var product = _productService.DeleteProductByIdService(id);
@@ -129,6 +136,7 @@ namespace ProductsAPI.Controllers
 
         [Route("SumOfProductsInAWeek")]
         [HttpGet]
+        [Authorize]
         public IActionResult SumOfProductsInAWeek()
         {
             var sumOfProducts = _productService.sumOfProductsInAWeekService();
@@ -140,6 +148,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpGet("GetAllDisabledProducts")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllDisabledProducts()
         {
             var result = _productService.GetAllDisabledProductService();
@@ -151,6 +160,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpGet("GetAllNonDisabledProducts")]
+        [Authorize]
         public IActionResult GetAllNonDisabledProducts()
         {
             var result = _productService.GetAllNonDisabledProductService();

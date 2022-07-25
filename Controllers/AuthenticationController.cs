@@ -29,7 +29,7 @@ namespace ProductsAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Login")]
         public IActionResult Login([FromBody] UserViewModel userViewModel)
         {
             var user = _userService.GetUserByEmailAndPassword(userViewModel);
@@ -43,6 +43,13 @@ namespace ProductsAPI.Controllers
 
             return NotFound();
         }
+
+        [Authorize]
+        [HttpPost("Logout")]
+        //public IActionResult Logout()
+        //{
+
+        //}
 
         private string GenerateToken(UserViewModel user)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.ServiceLayer.IServices;
 using ProductsAPI.ViewModels;
 using System;
@@ -19,6 +20,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetAllUsers()
         {
             var response = _userService.GetAllUsersService();
@@ -27,6 +29,7 @@ namespace ProductsAPI.Controllers
         }
 
         [HttpPost("CreateUser")]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateUser([FromBody] UserViewModel user)
         {
             if (ModelState.IsValid)
