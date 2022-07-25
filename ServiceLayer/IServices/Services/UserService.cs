@@ -65,5 +65,24 @@ namespace ProductsAPI.ServiceLayer.IServices.Services
 
             return result;
         }
+
+        public UserViewModel GetUserByEmailAndPassword(UserViewModel userVM)
+        {
+            UserViewModel userViewModel = new UserViewModel();
+
+            var result = _unitOfWork.User.Find(x => x.Email == userVM.Email && x.Password == userVM.Password).FirstOrDefault();
+
+            if (result != null)
+            {
+                userViewModel.Id = result.Id;
+                userViewModel.Name = result.Name;
+                userViewModel.Email = result.Email;
+                userViewModel.Password = result.Password;
+                userViewModel.Role = result.Role;
+
+            }
+
+            return userViewModel;
+        }
     }
 }
