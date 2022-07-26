@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.ServiceLayer.IServices;
 using ProductsAPI.ViewModels;
@@ -21,8 +23,15 @@ namespace ProductsAPI.Controllers
 
         [HttpGet("")]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var result = _productService.GetAllProductService();
 
             return Ok(result);
@@ -30,8 +39,15 @@ namespace ProductsAPI.Controllers
 
         [HttpGet("GetProductById/{id:int}")]
         [Authorize]
-        public IActionResult GetProductById(int id)
+        public async Task<IActionResult> GetProductById(int id)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             try
             {
                 var response = _productService.GetProductByIdService(id);
@@ -52,8 +68,15 @@ namespace ProductsAPI.Controllers
 
         [HttpPost("CreateProduct")]
         [Authorize]
-        public IActionResult CreateProduct([FromBody]ProductViewModel product)
+        public async Task<IActionResult> CreateProductAsync([FromBody]ProductViewModel product)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             if (ModelState.IsValid)
             {
                 try
@@ -81,8 +104,15 @@ namespace ProductsAPI.Controllers
 
         [HttpPut("UpdateProduct")]
         [Authorize]
-        public IActionResult UpdateProduct([FromBody] ProductViewModel product)
+        public async Task<IActionResult> UpdateProductAsync([FromBody] ProductViewModel product)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             if (ModelState.IsValid)
             {
                 try
@@ -111,8 +141,15 @@ namespace ProductsAPI.Controllers
         [Route("DisableProduct/{id:int}")]
         [HttpGet]
         [Authorize]
-        public IActionResult DisableProduct(int id)
+        public async Task<IActionResult> DisableProductAsync(int id)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var product = _productService.DisableProductByIdService(id);
 
             if (product == null)
@@ -124,8 +161,15 @@ namespace ProductsAPI.Controllers
         [Route("DeleteProduct/{id:int}")]
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProductAsync(int id)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var product = _productService.DeleteProductByIdService(id);
 
             if (product == null) 
@@ -137,8 +181,15 @@ namespace ProductsAPI.Controllers
         [Route("SumOfProductsInAWeek")]
         [HttpGet]
         [Authorize]
-        public IActionResult SumOfProductsInAWeek()
+        public async Task<IActionResult> SumOfProductsInAWeekAsync()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var sumOfProducts = _productService.sumOfProductsInAWeekService();
 
             if (sumOfProducts == 0)
@@ -149,8 +200,15 @@ namespace ProductsAPI.Controllers
 
         [HttpGet("GetAllDisabledProducts")]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetAllDisabledProducts()
+        public async Task<IActionResult> GetAllDisabledProductsAsync()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var result = _productService.GetAllDisabledProductService();
 
             if(result.Count() == 0)
@@ -161,8 +219,15 @@ namespace ProductsAPI.Controllers
 
         [HttpGet("GetAllNonDisabledProducts")]
         [Authorize]
-        public IActionResult GetAllNonDisabledProducts()
+        public async Task<IActionResult> GetAllNonDisabledProductsAsync()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var result = _productService.GetAllNonDisabledProductService();
 
             if (result.Count() == 0)

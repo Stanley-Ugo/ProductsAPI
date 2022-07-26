@@ -31,9 +31,9 @@ namespace ProductsAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public IActionResult Login([FromBody] UserViewModel userViewModel)
+        public IActionResult Login([FromBody] LoginViewModel loginViewModel)
         {
-            var user = _userService.GetUserByEmailAndPassword(userViewModel);
+            var user = _userService.GetUserByEmailAndPassword(loginViewModel);
 
             if (user != null)
             {

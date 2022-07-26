@@ -9,7 +9,7 @@ namespace ProductsAPI.ServiceLayer.IServices
 
         bool CreateUserService(UserViewModel user);
 
-        UserViewModel GetUserByEmailAndPassword(UserViewModel userViewModel);
+        UserViewModel GetUserByEmailAndPassword(LoginViewModel loginViewModel);
 
     }
 }

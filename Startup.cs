@@ -11,6 +11,7 @@ using ProductsAPI.DataAccessLayerEFCore.Repository;
 using ProductsAPI.DomainLayer.IRepository;
 using ProductsAPI.ServiceLayer.IServices;
 using ProductsAPI.ServiceLayer.IServices.Services;
+using Microsoft.AspNetCore.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,12 @@ namespace ProductsAPI
 
             services.AddTransient<IProductService, ProductService>();
 
+            services.AddSession(options => 
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddMvc();
 
             services.AddControllers();
@@ -90,6 +97,8 @@ namespace ProductsAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
