@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.ServiceLayer.IServices;
 using ProductsAPI.ViewModels;
@@ -21,8 +23,15 @@ namespace ProductsAPI.Controllers
 
         [HttpGet("")]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             var response = _userService.GetAllUsersService();
 
             return Ok(response);
@@ -30,8 +39,15 @@ namespace ProductsAPI.Controllers
 
         [HttpPost("CreateUser")]
         [Authorize(Roles = "Admin")]
-        public IActionResult CreateUser([FromBody] UserViewModel user)
+        public async Task<IActionResult> CreateUser([FromBody] UserViewModel user)
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue != "isValid")
+                return Unauthorized();
+
             if (ModelState.IsValid)
             {
                 try

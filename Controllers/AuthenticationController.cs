@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +39,8 @@ namespace ProductsAPI.Controllers
             {
                 var token = GenerateToken(user);
 
+                HttpContext.Session.SetString(token, "isValid");
+
                 return Ok(token);
             }
 
@@ -46,10 +49,18 @@ namespace ProductsAPI.Controllers
 
         [Authorize]
         [HttpPost("Logout")]
-        //public IActionResult Logout()
-        //{
+        public async Task<IActionResult> Logout()
+        {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
 
-        //}
+            var accessTokenValue = HttpContext.Session.GetString(accessToken);
+
+            if (accessTokenValue == "isValid")
+
+                HttpContext.Session.SetString(accessToken, "notValid");
+
+            return NoContent();
+        }
 
         private string GenerateToken(UserViewModel user)
         {
